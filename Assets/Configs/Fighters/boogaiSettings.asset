@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2169a85b3a3325a479d0a3e0a8915fc9, type: 3}
+  m_Name: boogaiSettings
+  m_EditorClassIdentifier: Assembly-CSharp::FighterSettings
+  Name: Boogai
+  Model: {fileID: 1939722956134744526, guid: 912fd4402b0a4584ea45c680e0e05739, type: 3}
+  Icon: {fileID: 21300000, guid: 148170fd5aead2a4dba265c2be347890, type: 3}
+  HurtSound1: {fileID: 8300000, guid: 4b3b5cb3b28ec5141b8b82c20930e15d, type: 3}
+  HurtSound2: {fileID: 8300000, guid: 3f0b6b45c8b79d34f8e9377a9a920f46, type: 3}
+  Health: 30000
+  ArmKickDamage: 250
+  LegKickDamage: 500
+  ArmKickSpeed: 1
+  LegKickSpeed: 1.5
+  StunProbability: 0.3
+  StunTimeRange: {x: 3, y: 4}

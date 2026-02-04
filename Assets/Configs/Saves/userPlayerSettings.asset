@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d908f586f5b68f47a88fe15b155bb8f, type: 3}
+  m_Name: userPlayerSettings
+  m_EditorClassIdentifier: Assembly-CSharp::UserGameSettings
+  MusicVolume: 0.5
+  SoundVolume: 0.75
+  IsFullscreen: 1
