@@ -23,7 +23,7 @@ public class PreparingWindow : MonoBehaviour
 
     public void Continue()
     {
-        roundManager.InitPlayer(_selectedFighter, _selectedTalisman, _selectedElixir);
+        roundManager.InitPlayerServerRpc(fighters.IndexOf(_selectedFighter)/*, _selectedTalisman, _selectedElixir*/);
         roundManager.StartGame();
     }
 

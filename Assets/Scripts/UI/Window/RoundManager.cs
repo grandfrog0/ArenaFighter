@@ -31,14 +31,17 @@ public class RoundManager : NetworkBehaviour
 
     private Coroutine _deathRoutine;
 
-    public void InitPlayer(FighterSettings fighter, FightingTalisman talisman, StoreItem elixir)
+    [ServerRpc(RequireOwnership = false)]
+    public void InitPlayerServerRpc(int fighterIndex/*, FightingTalisman talisman, StoreItem elixir*/)
     {
+        FighterSettings fighter = PrefabBuffer.Instance.fighters[fighterIndex];
+
         FighterEntity entity = players.Find(x => x.OwnerClientId == OwnerClientId);
         if (entity)
         {
             PlayerController controller = entity.GetComponent<PlayerController>();
             controller.Init(fighter.Model);
-            entity.Init(fighter, talisman, elixir);
+            entity.Init(fighter/*, talisman, elixir*/);
 
             gameGui.Init(fighter, entity);
         }

@@ -42,7 +42,7 @@ public class PlayerController : NetworkBehaviour
         Model = Instantiate(modelPrefab, transform);
         _anim = Model.GetComponent<Animator>();
 
-        if (false)
+        if (IsOwner)
         {
             _cam = Camera.main.GetComponent<CameraObserver>();
             _cam.Target = HeadPoint;
@@ -51,8 +51,11 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    private void Awake()
+    private void Awake1()
     {
+        _rb = GetComponent<Rigidbody>();
+        _entity = GetComponent<FighterEntity>();
+
         if (IsOwner)
         {
             _cam = Camera.main.GetComponent<CameraObserver>();
@@ -204,7 +207,5 @@ public class PlayerController : NetworkBehaviour
     private void SetTriggerClientRpc(string key)
     {
         _anim?.SetTrigger(key);
-        if (!_anim)
-            transform.localScale *= 1.5f;
     }
 }
