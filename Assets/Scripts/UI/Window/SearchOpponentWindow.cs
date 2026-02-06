@@ -16,6 +16,7 @@ public class SearchOpponentWindow : MonoBehaviour
 
     private void OnClientConnected(ulong id)
     {
-        OnConnected.Invoke();
+        if (NetworkManager.Singleton.ConnectedClients.Count == 2)
+            OnConnected.Invoke();
     }
 }

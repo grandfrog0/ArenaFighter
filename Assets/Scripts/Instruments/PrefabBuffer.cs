@@ -3,17 +3,15 @@ using UnityEngine;
 
 public class PrefabBuffer : MonoBehaviour
 {
-    public static PrefabBuffer Instance { get; private set; }
+    private static PrefabBuffer _instance;
 
-    public List<FighterSettings> fighters; 
-    public List<FightingTalisman> fighters; 
-    public List<FighterSettings> fighters;
+    public static FighterSettings GetFighter(int id)
+        => id != -1 ? _instance.items.Fighters[id] : null;
+    public static FightingTalisman GetTalisman(int id)
+        => id != -1 ? _instance.items.Talismans[id] : null;
+    public static FightingElixir GetElixir(int id)
+        => id != -1 ? _instance.items.Elixirs[id] : null;
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(Instance);
-    }
+    [SerializeField] GameItems items;
+    private void Awake() => _instance = this;
 }

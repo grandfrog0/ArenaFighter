@@ -34,28 +34,16 @@ public class PlayerController : NetworkBehaviour
     public GameObject Model;
     public Transform HeadPoint;
 
-    public void Init(GameObject modelPrefab)
+    [ClientRpc]
+    public void InitClientRpc(SelectedPlayerData data)
     {
         _rb = GetComponent<Rigidbody>();
         _entity = GetComponent<FighterEntity>();
 
-        Model = Instantiate(modelPrefab, transform);
+        Model = Instantiate(PrefabBuffer.GetFighter(data.FighterId).Model, transform);
         _anim = Model.GetComponent<Animator>();
 
-        if (IsOwner)
-        {
-            _cam = Camera.main.GetComponent<CameraObserver>();
-            _cam.Target = HeadPoint;
-            _cam.TargetModel = Model;
-            _cam.RotateTransform = transform;
-        }
-    }
-
-    private void Awake1()
-    {
-        _rb = GetComponent<Rigidbody>();
-        _entity = GetComponent<FighterEntity>();
-
+        Debug.Log(OwnerClientId);
         if (IsOwner)
         {
             _cam = Camera.main.GetComponent<CameraObserver>();
@@ -153,11 +141,17 @@ public class PlayerController : NetworkBehaviour
     }
     private void KickArm()
     {
+        if (_entity.IsArmInCooldown)
+            return;
+
         SetTrigger("OnArmKick");
         _entity.KickArm();
     }
     private void KickLeg()
     {
+        if (_entity.IsLegInCooldown)
+            return;
+
         SetTrigger("OnLegKick");
         _entity.KickLeg();
     }
@@ -173,10 +167,16 @@ public class PlayerController : NetworkBehaviour
     {
         _isDead = value;
         SetBoolean("IsDead", value);
-        _cam.enabled = !value;
+
+        if (_cam)
+            _cam.enabled = !value;
     }
 
-    public void OnStunned(bool value)
+    [ServerRpc(RequireOwnership = false)]
+    public void OnStunnedServerRpc(bool value)
+        => OnStunnedClientRpc(value);
+    [ClientRpc]
+    public void OnStunnedClientRpc(bool value)
         => _isStunned = value;
 
     // Animator network scripts
@@ -191,7 +191,7 @@ public class PlayerController : NetworkBehaviour
 
     private void SetBoolean(string key, bool value)
         => SetBooleanServerRpc(key, value);
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void SetBooleanServerRpc(string key, bool value)
         => SetBooleanClientRpc(key, value);
     [ClientRpc]

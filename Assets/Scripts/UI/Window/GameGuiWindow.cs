@@ -10,14 +10,37 @@ public class GameGuiWindow : MonoBehaviour
     [SerializeField] Image talismanEffect;
     private Coroutine _effectRoutine;
 
-    public void Init(FighterSettings fighter, FighterEntity entity)
+    public void InitPlayer(FighterSettings fighter, FighterEntity entity)
     {
         fighter1Image.sprite = fighter.Icon;
         entity.OnTalismanEffectUsed.AddListener(SetTalismanEffect);
     }
 
+    public void InitEnemy(FighterSettings fighter, FighterEntity entity)
+    {
+        fighter2Image.sprite = fighter.Icon;
+        entity.OnTalismanEffectUsed.AddListener(SetEnemyTalismanEffect);
+    }
+
     private void SetTalismanEffect(FightingTalisman talisman)
     {
+        if (talisman.Name == "IceTalisman")
+            return;
+
+        talismanEffect.sprite = talisman.EffectSprite;
+
+        if (_effectRoutine != null)
+        {
+            StopCoroutine(_effectRoutine);
+        }    
+        _effectRoutine = StartCoroutine(FadeRoutine(talisman.UseTime));
+    }
+
+    private void SetEnemyTalismanEffect(FightingTalisman talisman)
+    {
+        if (talisman.Name != "IceTalisman")
+            return;
+
         talismanEffect.sprite = talisman.EffectSprite;
 
         if (_effectRoutine != null)

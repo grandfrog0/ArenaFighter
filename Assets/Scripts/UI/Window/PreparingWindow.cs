@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PreparingWindow : MonoBehaviour
+public class PreparingWindow : NetworkBehaviour
 {
     [SerializeField] StoreConfig store;
     [SerializeField] RoundManager roundManager;
@@ -17,14 +18,22 @@ public class PreparingWindow : MonoBehaviour
     [SerializeField] List<Toggle> talismanButtons;
     [SerializeField] List<Toggle> elixirButtons;
 
-    private FighterSettings _selectedFighter;
-    private FightingTalisman _selectedTalisman;
-    private StoreItem _selectedElixir;
+    private int _selectedFighterId;
+    private int _selectedTalismanId;
+    private int _selectedElixirId;
 
     public void Continue()
     {
-        roundManager.InitPlayerServerRpc(fighters.IndexOf(_selectedFighter)/*, _selectedTalisman, _selectedElixir*/);
-        roundManager.StartGame();
+        SelectedPlayerData data = new()
+        {
+            FighterId = _selectedFighterId,
+            TalismanId = _selectedTalismanId,
+            ElixirId = _selectedElixirId,
+            IsReady = true
+        };
+        Debug.Log(_selectedElixirId);
+        
+        roundManager.InitPlayerServerRpc(NetworkManager.Singleton.LocalClientId, data);
     }
 
     private void OnEnable()
@@ -42,7 +51,7 @@ public class PreparingWindow : MonoBehaviour
                 fighterButtons[i].gameObject.SetActive(false);
             }
         }
-        _selectedFighter = fighters[0];
+        _selectedFighterId = 0;
 
         for (int i = 0; i < talismanButtons.Count; i++)
         {
@@ -57,7 +66,7 @@ public class PreparingWindow : MonoBehaviour
                 talismanButtons[i].gameObject.SetActive(false);
             }
         }
-        _selectedTalisman = talismans.Find(x => store.BoughtItems.Any(y => y.Item == x.Name));
+        _selectedTalismanId = talismans.FindIndex(x => store.BoughtItems.Any(y => y.Item == x.Name));
 
         for (int i = 0; i < elixirButtons.Count; i++)
         {
@@ -93,15 +102,15 @@ public class PreparingWindow : MonoBehaviour
 
     private void SelectFighter(int index)
     {
-        _selectedFighter = fighters[index];
+        _selectedFighterId = index;
     }
     private void SelectTalisman(int index)
     {
-        _selectedTalisman = talismans[index];
+        _selectedTalismanId = index;
     }
     private void SelectElixir(int index)
     {
-        _selectedElixir = elixirs[index];
+        _selectedElixirId = index;
     }
 
     private bool IsFighterAvailable(int index)

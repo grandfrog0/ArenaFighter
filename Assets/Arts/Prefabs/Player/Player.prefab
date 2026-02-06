@@ -135,7 +135,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4147305370404608561}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: SetDead
+        m_MethodName: SetDeadServerRpc
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4147305370404608561}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: SetDead
+        m_MethodName: SetDeadServerRpc
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -165,7 +165,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4147305370404608561}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnStunned
+        m_MethodName: OnStunnedServerRpc
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

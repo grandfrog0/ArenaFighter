@@ -2182,6 +2182,7 @@ GameObject:
   - component: {fileID: 315849422}
   - component: {fileID: 315849421}
   - component: {fileID: 315849423}
+  - component: {fileID: 315849424}
   m_Layer: 5
   m_Name: Window
   m_TagString: Untagged
@@ -2264,6 +2265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df7324f32e9d2c5488db811fb3f196a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreparingWindow
+  ShowTopMostFoldoutHeaderGroup: 1
   store: {fileID: 11400000, guid: 829f1a903991e0647b438ead7ca12f65, type: 2}
   roundManager: {fileID: 1447374746}
   fighters:
@@ -2288,6 +2290,31 @@ MonoBehaviour:
   elixirButtons:
   - {fileID: 837091006}
   - {fileID: 1046518556}
+--- !u!114 &315849424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315849419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1800520920
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &320545545 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3743532170439830433, guid: 44fc1cd2ef3db7b4d8cf3eff54b31afe, type: 3}
@@ -6760,6 +6787,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &862288251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8769681572848347183, guid: 44fc1cd2ef3db7b4d8cf3eff54b31afe, type: 3}
+  m_PrefabInstance: {fileID: 1155113516}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &868813127
 GameObject:
   m_ObjectHideFlags: 0
@@ -8265,34 +8303,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 834458740}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1542307720}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: Play
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1293366879}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12193,6 +12207,30 @@ MonoBehaviour:
   OnRoundStart:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 834458740}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1293366879}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1334722710}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -12283,6 +12321,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnPlayer2HealthChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 862288251}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+        m_MethodName: set_value
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnTimerPercentChanged:
     m_PersistentCalls:
       m_Calls:
@@ -12315,10 +12368,11 @@ MonoBehaviour:
         m_CallState: 2
   roundTime: 60
   maxRoundsCount: 3
-  players: []
   playersPositions:
   - {fileID: 901189658}
   - {fileID: 775328523}
+  readyPlayers:
+    m_InternalValue: 0
   winScreen: {fileID: 764270983}
   loseScreen: {fileID: 1665350588}
   winWindow: {fileID: 1020847167}
@@ -13854,10 +13908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146444b022bf473458c9c56494f0bf38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PrefabBuffer
-  fighters:
-  - {fileID: 11400000, guid: 1240cb16b85fb68418315791d7d4a777, type: 2}
-  - {fileID: 11400000, guid: 0ba3111499a067a4bad1b69c67522073, type: 2}
-  - {fileID: 11400000, guid: 7f048b9eb4468bc409d61938944dc697, type: 2}
+  items: {fileID: 11400000, guid: 4a323e4f47829c349a80e8deed4b8a91, type: 2}
 --- !u!64 &1676996094
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14892,7 +14943,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     NetworkTopology: 0
     UseCMBService: 0
-    AutoSpawnPlayerPrefabClientSide: 1
+    AutoSpawnPlayerPrefabClientSide: 0
     NetworkMessageMetrics: 1
     NetworkProfilingMetrics: 1
     OldPrefabList: []

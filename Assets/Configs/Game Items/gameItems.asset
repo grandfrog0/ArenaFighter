@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 771936bd06b0fc648bc57e4f8060ad54, type: 3}
+  m_Name: gameItems
+  m_EditorClassIdentifier: Assembly-CSharp::GameItems
+  Fighters:
+  - {fileID: 11400000, guid: 1240cb16b85fb68418315791d7d4a777, type: 2}
+  - {fileID: 11400000, guid: 0ba3111499a067a4bad1b69c67522073, type: 2}
+  - {fileID: 11400000, guid: 7f048b9eb4468bc409d61938944dc697, type: 2}
+  Talismans:
+  - {fileID: 11400000, guid: ea41208f7374c1543b39e3694f02c763, type: 2}
+  - {fileID: 11400000, guid: 57c888a71bc5f1f48a781c4091dc8785, type: 2}
+  - {fileID: 11400000, guid: 191104c7f00377d45864763a833eaa5d, type: 2}
+  Elixirs:
+  - {fileID: 11400000, guid: f423475201dc31e4e9eaf9bf1b13b093, type: 2}
+  - {fileID: 11400000, guid: 2e729eebcac9cc24ca3670146f5d61de, type: 2}

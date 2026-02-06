@@ -13,6 +13,7 @@ public class FighterEntity : NetworkBehaviour
 
     private float _maxHealth;
     private float _health;
+    public float Health => _health;
     public float HealthPercent => _health / _maxHealth;
 
     private float _armKickDamage;
@@ -25,14 +26,18 @@ public class FighterEntity : NetworkBehaviour
     private float _armKickDamageMultiplier = 1;
     private float _legKickDamageMultiplier = 1;
 
+    public bool IsArmInCooldown { get; private set; } = false;
+    public bool IsLegInCooldown { get; private set; } = false;
+
     private bool _isDead;
 
     private bool _isStunned;
     private Coroutine _stunRoutine;
 
     // items
+    public FighterSettings Settings { get; private set; }
     private FightingTalisman _talisman;
-    private StoreItem _elixir;
+    private FightingElixir _elixir;
 
     [SerializeField] AudioSource attackAudioSource;
     [SerializeField] AudioSource hurtAudioSource;
@@ -40,21 +45,23 @@ public class FighterEntity : NetworkBehaviour
 
     private PlayerController _controller;
 
-    public void Init(FighterSettings _settings, FightingTalisman talisman, StoreItem elixir)
+    [ClientRpc]
+    public void InitClientRpc(SelectedPlayerData data)
     {
-        _health = _maxHealth = _settings.Health;
-        _armKickDamage = _settings.ArmKickDamage;
-        _legKickDamage = _settings.LegKickDamage;
-        _armKickSpeed = _settings.ArmKickSpeed;
-        _legKickSpeed = _settings.LegKickSpeed;
-        _stunProbability = _settings.StunProbability;
-        _stunTimeRange = _settings.StunTimeRange;
+        Settings = PrefabBuffer.GetFighter(data.FighterId);
+        _talisman = PrefabBuffer.GetTalisman(data.TalismanId);
+        _elixir = PrefabBuffer.GetElixir(data.ElixirId);
 
-        _talisman = talisman;
-        _elixir = elixir;
+        _health = _maxHealth = Settings.Health;
+        _armKickDamage = Settings.ArmKickDamage;
+        _legKickDamage = Settings.LegKickDamage;
+        _armKickSpeed = Settings.ArmKickSpeed;
+        _legKickSpeed = Settings.LegKickSpeed;
+        _stunProbability = Settings.StunProbability;
+        _stunTimeRange = Settings.StunTimeRange;
 
-        _hurt1 = _settings.HurtSound1;
-        _hurt2 = _settings.HurtSound2;
+        _hurt1 = Settings.HurtSound1;
+        _hurt2 = Settings.HurtSound2;
     }
 
     public void Respawn()
@@ -67,6 +74,16 @@ public class FighterEntity : NetworkBehaviour
     }
 
     public void TakeDamage(float value)
+    {
+        TakeDamageServerRpc(value);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void TakeDamageServerRpc(float value)
+    {
+        TakeDamageClientRpc(value);
+    }
+    [ClientRpc]
+    private void TakeDamageClientRpc(float value)
     {
         _health -= value;
         Debug.Log($"{name} got damage ({value}). Health left: {_health}");
@@ -85,6 +102,7 @@ public class FighterEntity : NetworkBehaviour
     public void Stun(float time)
     {
         _isStunned = true;
+        Debug.Log("stunned!");
         OnStunned.Invoke(_isStunned);
 
         if (_stunRoutine != null)
@@ -96,6 +114,7 @@ public class FighterEntity : NetworkBehaviour
     {
         yield return new WaitForSeconds(stunTime);
 
+        Debug.Log("not stunned!");
         _isStunned = false;
         OnStunned.Invoke(_isStunned);
     }
@@ -103,10 +122,12 @@ public class FighterEntity : NetworkBehaviour
     public void KickArm()
     {
         Attack(_armKickDamage * _armKickDamageMultiplier);
+        StartCoroutine(ArmCooldownRoutine(_armKickSpeed));
     }
     public void KickLeg()
     {
         Attack(_legKickDamage * _legKickDamageMultiplier);
+        StartCoroutine(LegCooldownRoutine(_legKickSpeed));
     }
 
     public void SpecialAttack()
@@ -148,7 +169,6 @@ public class FighterEntity : NetworkBehaviour
 
     private void Attack(float damage)
     {
-        attackAudioSource.Play();
         var targets = Physics.OverlapSphere(transform.position, 2);
         foreach (var target in targets)
         {
@@ -159,17 +179,30 @@ public class FighterEntity : NetworkBehaviour
                 {
                     enemy.Stun(Random.Range(_stunTimeRange.x, _stunTimeRange.y));
                 }
+
+                attackAudioSource.Play();
                 return;
             }
         }
     }
 
+    private IEnumerator ArmCooldownRoutine(float time)
+    {
+        IsArmInCooldown = true;
+        yield return new WaitForSeconds(time);
+        IsArmInCooldown = false;
+    }
+
+    private IEnumerator LegCooldownRoutine(float time)
+    {
+        IsLegInCooldown = true;
+        yield return new WaitForSeconds(time);
+        IsLegInCooldown = false;
+    }
+
     public override void OnNetworkSpawn()
     {
         _controller = GetComponent<PlayerController>();
-
-        RoundManager.Instance.players.Add(this);
-        RoundManager.Instance.SetHealthTarget(this);
         base.OnNetworkSpawn();
     }
 }
