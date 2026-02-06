@@ -5,6 +5,7 @@ public class FightingTalisman : FightingItem
 {
     public string Name;
     public Sprite Icon;
+    public int Id;
 
     public Sprite EffectSprite;
     public float UseTime;

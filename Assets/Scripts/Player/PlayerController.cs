@@ -10,8 +10,8 @@ public class PlayerController : NetworkBehaviour
     [Header("Movement Settings")]
     [SerializeField] float baseSpeed = 5;
     [SerializeField] float runAddSpeed = 5;
-    public float SpeedMultiplier = 1;
-    public float MoveSpeed => (baseSpeed + (_isRunning ? runAddSpeed : 0)) * SpeedMultiplier;
+    public NetworkVariable<float> SpeedMultiplier = new(1);
+    public float MoveSpeed => (baseSpeed + (_isRunning ? runAddSpeed : 0)) * SpeedMultiplier.Value;
     [Header("Action Settings")]
     [SerializeField] float jumpStrength = 10;
     [SerializeField] float rollStrength = 15;

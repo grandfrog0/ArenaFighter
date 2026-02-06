@@ -18,6 +18,9 @@ public class RoundManager : NetworkBehaviour
     public UnityEvent<float> OnPlayer1HealthChanged = new();
     public UnityEvent<float> OnPlayer2HealthChanged = new();
 
+    public UnityEvent<float> OnPlayer1TalismanRechargeChanged = new();
+    public UnityEvent<float> OnPlayer2TalismanRechargeChanged = new();
+
     public UnityEvent<float> OnTimerPercentChanged = new();
     public UnityEvent<float> OnTimerChanged = new();
     [SerializeField] float roundTime = 60;
@@ -68,13 +71,15 @@ public class RoundManager : NetworkBehaviour
         _player = _players.First(x => x.OwnerClientId == playerId);
         _player.OnDead.AddListener(OnPlayerDead);
         _player.OnHealthPercentChanged.AddListener(x => OnPlayer1HealthChanged.Invoke(x));
+        _player.OnTalismanRechargeChangedUsed.AddListener(x => OnPlayer1TalismanRechargeChanged.Invoke(x));
 
         _enemy = _players.First(x => x.OwnerClientId != playerId);
         _enemy.OnDead.AddListener(OnPlayerDead);
         _enemy.OnHealthPercentChanged.AddListener(x => OnPlayer2HealthChanged.Invoke(x));
+        _enemy.OnTalismanRechargeChangedUsed.AddListener(x => OnPlayer2TalismanRechargeChanged.Invoke(x));
 
-        gameGui.InitPlayer(_player.Settings, _player);
-        gameGui.InitEnemy(_enemy.Settings, _enemy);
+        gameGui.InitPlayer(_player.PlayerData, _player);
+        gameGui.InitEnemy(_enemy.PlayerData, _enemy);
 
         _timer = StartCoroutine(TimerRoutine());
     }

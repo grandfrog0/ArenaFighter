@@ -1,29 +1,43 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameGuiWindow : MonoBehaviour
+public class GameGuiWindow : NetworkBehaviour
 {
-    [SerializeField] Image fighter1Image;
-    [SerializeField] Image fighter2Image;
+    [SerializeField] Image fighter1Image, talisman1Image, elixir1Image;
+    [SerializeField] Image fighter2Image, talisman2Image, elixir2Image;
 
     [SerializeField] Image talismanEffect;
     private Coroutine _effectRoutine;
 
-    public void InitPlayer(FighterSettings fighter, FighterEntity entity)
+    public void InitPlayer(SelectedPlayerData data, FighterEntity entity)
     {
+        FighterSettings fighter = PrefabBuffer.GetFighter(data.FighterId);
+        FightingTalisman talisman = PrefabBuffer.GetTalisman(data.TalismanId);
+        FightingElixir elixir = PrefabBuffer.GetElixir(data.ElixirId);
+
         fighter1Image.sprite = fighter.Icon;
+        if (talisman) talisman1Image.sprite = talisman.Icon;
+        if (elixir) elixir1Image.sprite = elixir.Icon;
         entity.OnTalismanEffectUsed.AddListener(SetTalismanEffect);
     }
 
-    public void InitEnemy(FighterSettings fighter, FighterEntity entity)
+    public void InitEnemy(SelectedPlayerData data, FighterEntity entity)
     {
+        FighterSettings fighter = PrefabBuffer.GetFighter(data.FighterId);
+        FightingTalisman talisman = PrefabBuffer.GetTalisman(data.TalismanId);
+        FightingElixir elixir = PrefabBuffer.GetElixir(data.ElixirId);
+
         fighter2Image.sprite = fighter.Icon;
+        if (talisman) talisman2Image.sprite = talisman.Icon;
+        if (elixir) elixir2Image.sprite = elixir.Icon;
         entity.OnTalismanEffectUsed.AddListener(SetEnemyTalismanEffect);
     }
 
-    private void SetTalismanEffect(FightingTalisman talisman)
+    private void SetTalismanEffect(int talismanId)
     {
+        FightingTalisman talisman = PrefabBuffer.GetTalisman(talismanId);
         if (talisman.Name == "IceTalisman")
             return;
 
@@ -32,12 +46,13 @@ public class GameGuiWindow : MonoBehaviour
         if (_effectRoutine != null)
         {
             StopCoroutine(_effectRoutine);
-        }    
+        }
         _effectRoutine = StartCoroutine(FadeRoutine(talisman.UseTime));
     }
 
-    private void SetEnemyTalismanEffect(FightingTalisman talisman)
+    private void SetEnemyTalismanEffect(int talismanId)
     {
+        FightingTalisman talisman = PrefabBuffer.GetTalisman(talismanId);
         if (talisman.Name != "IceTalisman")
             return;
 

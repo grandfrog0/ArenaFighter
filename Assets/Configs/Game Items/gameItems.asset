@@ -18,8 +18,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7f048b9eb4468bc409d61938944dc697, type: 2}
   Talismans:
   - {fileID: 11400000, guid: ea41208f7374c1543b39e3694f02c763, type: 2}
-  - {fileID: 11400000, guid: 57c888a71bc5f1f48a781c4091dc8785, type: 2}
   - {fileID: 11400000, guid: 191104c7f00377d45864763a833eaa5d, type: 2}
+  - {fileID: 11400000, guid: 57c888a71bc5f1f48a781c4091dc8785, type: 2}
   Elixirs:
   - {fileID: 11400000, guid: f423475201dc31e4e9eaf9bf1b13b093, type: 2}
   - {fileID: 11400000, guid: 2e729eebcac9cc24ca3670146f5d61de, type: 2}
