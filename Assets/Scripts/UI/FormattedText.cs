@@ -8,20 +8,18 @@ public class FormattedText : MonoBehaviour
 
     public void SetValue(float value)
     {
+        if (!_text) _text = GetComponent<TMP_Text>();
         _text.text = string.Format(formatString, value);
     }
     public void SetValue(int value)
     {
+        if (!_text) _text = GetComponent<TMP_Text>();
         _text.text = string.Format(formatString, value);
     }
     public void SetValue(params object[] objects)
     {
+        if (!_text) _text = GetComponent<TMP_Text>();
         _text.text = string.Format(formatString, objects);
-    }
-
-    private void OnValidate()
-    {
-        _text = GetComponent<TMP_Text>();
     }
 
     private void OnEnable()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -74,6 +75,11 @@ public class FighterEntity : NetworkBehaviour
         _enemyController = NetworkManager.Singleton.ConnectedClients.First(
             x => x.Value.ClientId != OwnerClientId
         ).Value.PlayerObject.GetComponent<PlayerController>();
+
+        if (_elixir)
+        {
+            StartCoroutine(ElixirRoutine());
+        }
     }
 
     public void Respawn()
@@ -87,23 +93,30 @@ public class FighterEntity : NetworkBehaviour
 
     public void TakeDamage(float value)
     {
-        TakeDamageServerRpc(value);
+        TakeDamageServerRpc(value, true);
+    }
+    private void Heal(float value)
+    {
+        TakeDamageServerRpc(-value, false);
     }
     [ServerRpc(RequireOwnership = false)]
-    private void TakeDamageServerRpc(float value)
+    private void TakeDamageServerRpc(float value, bool useEffects)
     {
-        TakeDamageClientRpc(value);
+        TakeDamageClientRpc(value, useEffects);
     }
     [ClientRpc]
-    private void TakeDamageClientRpc(float value)
+    private void TakeDamageClientRpc(float value, bool useEffects)
     {
         _health -= value;
         Debug.Log($"{name} got damage ({value}). Health left: {_health}");
 
         OnHealthPercentChanged.Invoke(HealthPercent);
 
-        hurtAudioSource.clip = Random.Range(0, 2) == 0 ? _hurt1 : _hurt2;
-        hurtAudioSource.Play();
+        if (useEffects)
+        {
+            hurtAudioSource.clip = Random.Range(0, 2) == 0 ? _hurt1 : _hurt2;
+            hurtAudioSource.Play();
+        }
 
         if (_health <= 0 && !_isDead)
         {
@@ -245,5 +258,34 @@ public class FighterEntity : NetworkBehaviour
         _controller = GetComponent<PlayerController>();
 
         base.OnNetworkSpawn();
+    }
+
+    private IEnumerator ElixirRoutine()
+    {
+        switch (_elixir.Name)
+        {
+            // при достижении HP ниже 20% - начинает лечить игрока (по 1000 HP/сек в течении 5 секунд).
+            // При повторном понижении HP до критического – вновь срабатывает
+            case "SlowElixir":
+                while (true)
+                {
+                    if (!_isDead && HealthPercent < 0.2f)
+                        Heal(1000);
+
+                    yield return new WaitForSeconds(5f);
+                }
+
+            // при критическом уровне здоровья - ниже 5% одномоментно повышает HP на 3000 единиц
+            // (срабатывает 2 раза за бой, после действие прекращается)
+            case "MomentalElixir":
+                int usesLeft = 2;
+                while (!_isDead && usesLeft > 0)
+                {
+                    yield return new WaitWhile(() => HealthPercent < 0.05f);
+                    Heal(3000);
+                    usesLeft--;
+                }
+                break;
+        }
     }
 }
